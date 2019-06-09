@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sort"
@@ -9,11 +10,13 @@ import (
 )
 
 const (
-	TkFrontendsUrl = "/providers/docker/frontends"
+	TkFrontendsUrl = "%s/providers/%s/frontends"
 )
 
-func GetHosts(apiUrl string) ([]string, error) {
-	resp, err := http.Get(apiUrl + TkFrontendsUrl)
+func GetHosts(apiUrl, provider string) ([]string, error) {
+	url := fmt.Sprintf(TkFrontendsUrl, apiUrl, provider)
+
+	resp, err := http.Get(url)
 	if err != nil {
 		return []string{}, err
 	}

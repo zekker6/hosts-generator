@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"gitlab.r-styleserv.com/r-style/devops/traefik-hosts-generator/cmd/api"
-	"gitlab.r-styleserv.com/r-style/devops/traefik-hosts-generator/cmd/file_writer"
-	"gitlab.r-styleserv.com/r-style/devops/traefik-hosts-generator/cmd/generator"
+	"gitlab.com/zekker6/traefik-hosts-generator/cmd/api"
+	"gitlab.com/zekker6/traefik-hosts-generator/cmd/file_writer"
+	"gitlab.com/zekker6/traefik-hosts-generator/cmd/generator"
 	"log"
 	"os"
 	"reflect"
@@ -22,11 +22,17 @@ func main() {
 	platform := flag.String("platform", "", "change line-endings style for hosts file, default: '', available: darwin, windows, linux")
 	quiet := flag.Bool("quiet", false, "disable logging")
 	period := flag.Int("freq", 5, "poll every N seconds")
+	provider := flag.String("provider", "docker", "traefik provider to use")
+	postfix := flag.String("postfix", "", "use unique postifix if 2 parallel instances are running")
 	flag.Parse()
 
 	Log := func(fmt string, params ...interface{}) {
 		if !*quiet {
-			log.Printf(fmt, params)
+			if len(params) == 0 {
+				log.Printf(fmt)
+			} else {
+				log.Printf(fmt, params)
+			}
 		}
 	}
 
@@ -51,7 +57,7 @@ func main() {
 
 	var prevHosts []string
 	for {
-		hosts, err := api.GetHosts(*apiUrl)
+		hosts, err := api.GetHosts(*apiUrl, *provider)
 		if err != nil {
 			panic(err)
 		}
@@ -59,16 +65,16 @@ func main() {
 		if !reflect.DeepEqual(prevHosts, hosts) {
 			fileContent := generator.GenerateStrings(hosts, *localIP, lineEnding)
 
-			err = file_writer.WriteToHosts(fileContent, *hostsFile, lineEnding)
+			err = file_writer.WriteToHosts(fileContent, *hostsFile, lineEnding, *postfix)
 			if err != nil {
 				panic(err)
 			}
 
 			prevHosts = hosts
 
-			Log("updated hosts file, new hosts: %s%s%s", lineEnding, fileContent, lineEnding)
+			Log("updated hosts file, new hosts: %#s", fileContent)
 		} else {
-			Log("traefik hosts didn't change, skipping %s", lineEnding)
+			Log("traefik hosts didn't change, skipping")
 		}
 
 		if !*watch {
