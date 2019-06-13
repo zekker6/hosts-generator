@@ -40,7 +40,7 @@ gitlab:
     stage: release
     image: debian:9-slim
     before_script:
-      - which curl || (apt-get update && apt-get install curl)
+      - which curl || (apt-get update && apt-get install -y curl)
     script:
       - |
         curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" \
