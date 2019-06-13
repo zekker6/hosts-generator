@@ -5,6 +5,10 @@ stages:
   - package
 
 
+variables:
+  VERSION_MAJOR: 0
+  VERSION_MINOR: 0
+
 
 go:build:
   stage: build
@@ -27,7 +31,7 @@ docker:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   variables:
-    CONTAINER_TAG: zekker6/traefik-hosts-generator:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    CONTAINER_TAG: zekker6/traefik-hosts-generator:${CI_COMMIT_REF_SLUG}-${VERSION_MAJOR}.${VERSION_MINOR}.${CI_PIPELINE_IID}
   before_script:
     - (echo $DOCKER_AUTH | base64 -d) > /kaniko/.docker/config.json
     - export buildDir=$(pwd)
