@@ -4,8 +4,16 @@ stages:
   - build
   - package
 
+
+
 go:build:
   stage: build
+  variables:
+    GO_PROJECT_PATH: /go/src/gitlab.com/zekker6/traefik-hosts-generator
+  before_script:
+    - mkdir -p /go/src/gitlab.com/zekker6/traefik-hosts-generator
+    - ls -lah
+    - ln -sf $(pwd) ${GO_PROJECT_PATH}
   script:
     - make build
   artifacts:
