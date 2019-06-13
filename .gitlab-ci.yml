@@ -32,9 +32,9 @@ docker:
     - export buildDir=$(pwd)
   script:
     - /kaniko/executor --dockerfile docker/Dockerfile --destination ${CONTAINER_TAG} --context dir://${buildDir}/out --cache=false
-  only:
-    refs:
-      - tags
+#  only:
+#    refs:
+#      - tags
 
 gitlab:
     stage: release
@@ -46,9 +46,9 @@ gitlab:
         curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" \
              --data '{ "name": "New release", "tag_name": "${CI_COMMIT_TAG}", "description": "" }' \
              --request POST https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases
-    only:
-      refs:
-        - tags
+#    only:
+#      refs:
+#        - tags
 
 
 
