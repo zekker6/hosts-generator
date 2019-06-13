@@ -38,7 +38,7 @@ docker:
 
 gitlab:
     stage: release
-    image: debian:7-slim
+    image: debian:9-slim
     before_script:
       - which curl || (apt-get update && apt-get install curl)
     script:
