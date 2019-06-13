@@ -1,0 +1,28 @@
+image: golang:1.11
+
+stages:
+  - build
+  - package
+
+build:
+  stage: go:build
+  script:
+    - make build
+  artifacts:
+    paths:
+      - out
+    expire_in: 30 days
+
+docker:
+  stage: package
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  variables:
+    CONTAINER_TAG: zekker6/traefik-hosts-generator:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+  before_script:
+      - (echo $DOCKER_AUTH | base64 -d) > /kaniko/.docker/config.json
+      - export buildDir=$(pwd)
+  script:
+    - /kaniko/executor --dockerfile docker/Dockerfile --destination ${CONTAINER_TAG} --context dir://${buildDir}/out --cache=false
+
