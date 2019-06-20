@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"gitlab.com/zekker6/traefik-hosts-generator/cmd/api"
-	"gitlab.com/zekker6/traefik-hosts-generator/cmd/file_writer"
-	"gitlab.com/zekker6/traefik-hosts-generator/cmd/generator"
+	"traefik-hosts-generator/cmd/api"
+	"traefik-hosts-generator/cmd/file_writer"
+	"traefik-hosts-generator/cmd/generator"
 	"log"
 	"os"
 	"reflect"

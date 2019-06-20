@@ -1,4 +1,4 @@
-image: golang:1.11
+image: golang:1.12
 
 stages:
   - build
@@ -8,11 +8,7 @@ stages:
 go:build:
   stage: build
   variables:
-    GO_PROJECT_PATH: /go/src/gitlab.com/zekker6/traefik-hosts-generator
-  before_script:
-    - mkdir -p /go/src/gitlab.com/zekker6/
-    - ls -lah
-    - ln -sf $(pwd) ${GO_PROJECT_PATH}
+    GO111MODULES: on
   script:
     - make build
   artifacts:

@@ -1,6 +1,5 @@
 OUT_DIR=./out
 
-
 build: build_linux build_mac build_win
 
 build_linux: prepare_out_dir
