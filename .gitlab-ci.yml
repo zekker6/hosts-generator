@@ -8,7 +8,7 @@ stages:
 go:build:
   stage: build
   variables:
-    "GO111MODULES": on
+    "GO111MODULES": "on"
   script:
     - make build
   artifacts:
