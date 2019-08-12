@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"sort"
@@ -18,7 +19,7 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return []string{}, err
+		return []string{}, errors.Wrap(err, "API request failed")
 	}
 	defer resp.Body.Close()
 
@@ -30,7 +31,7 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 
 	err = json.Unmarshal([]byte(body), &parsedBody)
 	if err != nil {
-		return []string{}, err
+		return []string{}, errors.Wrap(err, "API response parse failed")
 	}
 
 	hosts := make([]string, 0)
@@ -40,7 +41,6 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 			hosts = append(hosts, strings.Replace(route.Rule, "Host:", "", -1))
 		}
 	}
-
 
 	sort.Strings(hosts)
 

@@ -1,7 +1,7 @@
 package file_writer
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -15,7 +15,7 @@ const (
 func WriteToHosts(newHosts, hostsLocation, lineEndings, postfix string) error {
 	currentContent, err := readHostsContent(hostsLocation)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "reading current file content failed")
 	}
 
 	entriesHeader := EntriesHeader + " " + postfix
@@ -35,7 +35,7 @@ func WriteToHosts(newHosts, hostsLocation, lineEndings, postfix string) error {
 
 		err = ioutil.WriteFile(hostsLocation, []byte(newContent), 0)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "cannot write new hosts content")
 		}
 
 		return nil

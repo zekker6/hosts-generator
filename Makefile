@@ -12,7 +12,7 @@ build_win: prepare_out_dir
 	GOOS=windows GOARCH=amd64 go build -o ${OUT_DIR}/win.traefik-hosts-generator
 
 docker_build: build_linux
-	docker build -f docker/Dockerfile $${OUT_DIR} -t zekker6/traefik-hosts-generator
+	docker build -f docker/Dockerfile ${OUT_DIR} -t zekker6/traefik-hosts-generator
 
 docker_push: docker_build
 	docker push zekker6/traefik-hosts-generator
