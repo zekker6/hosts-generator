@@ -15,7 +15,7 @@ go:build:
       - out
     expire_in: 30 days
 
-docker:
+gitlab:
   stage: release
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -32,8 +32,7 @@ docker:
       - tags
 
 
-
-docker:
+dockerhub:
   stage: release
   image:
     name: gcr.io/kaniko-project/executor:debug
