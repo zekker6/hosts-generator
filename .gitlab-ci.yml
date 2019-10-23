@@ -2,7 +2,7 @@ image: golang:1.12
 
 stages:
   - build
-  - package
+  - release
 
 go:build:
   stage: build
@@ -16,7 +16,25 @@ go:build:
     expire_in: 30 days
 
 docker:
-  stage: package
+  stage: release
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  variables:
+    CONTAINER_TAG: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - export buildDir=$(pwd)
+  script:
+    - /kaniko/executor --dockerfile docker/Dockerfile --destination ${CONTAINER_TAG} --context dir://${buildDir}/out --cache=false
+  only:
+    refs:
+      - tags
+
+
+
+docker:
+  stage: release
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -30,4 +48,5 @@ docker:
   only:
     refs:
       - tags
+
 
