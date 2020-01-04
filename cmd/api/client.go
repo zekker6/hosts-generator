@@ -29,9 +29,9 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 		Routes map[string]struct{ Rule string `json:"rule"` } `json:"routes"`
 	}
 
-	err = json.Unmarshal([]byte(body), &parsedBody)
+	err = json.Unmarshal(body, &parsedBody)
 	if err != nil {
-		return []string{}, errors.Wrap(err, "API response parse failed")
+		return []string{}, errors.Wrapf(err, "API response parse failed, body: %+v", body)
 	}
 
 	hosts := make([]string, 0)

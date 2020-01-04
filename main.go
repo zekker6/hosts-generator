@@ -2,13 +2,13 @@ package main
 
 import (
 	"flag"
-	"traefik-hosts-generator/cmd/api"
-	"traefik-hosts-generator/cmd/file_writer"
-	"traefik-hosts-generator/cmd/generator"
 	"log"
 	"os"
 	"reflect"
 	"time"
+	"traefik-hosts-generator/cmd/api"
+	"traefik-hosts-generator/cmd/file_writer"
+	"traefik-hosts-generator/cmd/generator"
 )
 
 const ApiUrl = "http://localhost:8080/api"
@@ -53,7 +53,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 
 	var prevHosts []string
 	for {
