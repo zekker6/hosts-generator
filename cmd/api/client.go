@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"sort"
 	"strings"
 )
@@ -36,9 +37,12 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 
 	hosts := make([]string, 0)
 
+	re := regexp.MustCompile(`(?m)Host:(.*?)([ &;]|$)`)
+
 	for _, v := range parsedBody {
 		for _, route := range v.Routes {
-			hosts = append(hosts, strings.Replace(route.Rule, "Host:", "", -1))
+			newHost := re.FindAllString(route.Rule, -1)
+			hosts = append(hosts, strings.Replace(newHost[0], "Host:", "", -1))
 		}
 	}
 
