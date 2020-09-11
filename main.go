@@ -35,7 +35,9 @@ func main() {
 
 	lineEnding := detectLineEndings()
 
-	writer = file_writer.NewWriter(*hostsFile, lineEnding, *postfix)
+	adapter := file_writer.NewFileHostsAdapter(*hostsFile)
+
+	writer = file_writer.NewWriter(&adapter, lineEnding, *postfix)
 
 	defer func() {
 		log("clearing before exit")
