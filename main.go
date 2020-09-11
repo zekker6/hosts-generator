@@ -54,6 +54,12 @@ func main() {
 		}
 	}
 
+	defer func() {
+		fileContent := generator.GenerateStrings([]string{}, *localIP, lineEnding)
+
+		file_writer.WriteToHosts(fileContent, *hostsFile, lineEnding, *postfix)
+	}()
+
 	var prevHosts []string
 	for {
 		hosts, err := api.GetHosts(*apiUrl, *provider)
