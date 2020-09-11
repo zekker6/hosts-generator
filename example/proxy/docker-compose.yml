@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  traefik:
+    image: traefik:v1.7.18
+    restart: unless-stopped
+    labels:
+      traefik.port: 8080
+    volumes:
+      - "./traefik.toml:/etc/traefik/traefik.toml"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ./certs:/etc/ssl/tf-certs:ro
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    networks:
+      - tk_web
+
+  tk-hosts:
+    image: zekker6/traefik-hosts-generator:v0.3.2
+    restart: unless-stopped
+    volumes:
+      - /etc/hosts:/hosts
+    command: "-platform=linux -api=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
+    networks:
+      - tk_web
+    depends_on:
+      - traefik
+
+networks:
+  tk_web:
+    external: true

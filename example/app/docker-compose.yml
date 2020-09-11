@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+  networks:
+    - tk_web
+
+networks:
+  tk_web:
+    external: true
