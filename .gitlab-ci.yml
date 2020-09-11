@@ -1,8 +1,16 @@
 image: golang:1.12
 
 stages:
+  - test
   - build
   - release
+
+test:
+  stage: test
+  variables:
+    "GO111MODULES": "on"
+  script:
+    - make test
 
 go:build:
   stage: build

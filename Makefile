@@ -19,3 +19,6 @@ docker_push: docker_build
 
 prepare_out_dir:
 	mkdir -p ${OUT_DIR}
+
+test:
+	go test -race -short `go list ./... | grep -v /vendor/`
