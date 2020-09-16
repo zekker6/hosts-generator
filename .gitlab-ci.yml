@@ -57,3 +57,14 @@ dockerhub:
       - tags
 
 
+github:
+  stage: release
+  image:
+    name: goreleaser/goreleaser
+  script:
+    - goreleaser --rm-dist
+  only:
+    refs:
+      - tags
+
+
