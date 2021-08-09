@@ -1,4 +1,4 @@
-package api
+package traefik
 
 import (
 	"encoding/json"
@@ -15,16 +15,25 @@ const (
 	TkFrontendsUrl = "%s/providers/%s/frontends"
 )
 
+type TraefikV1Client struct {
+	apiUrl   string
+	provider string
+}
+
+func NewTraefikV1Client(apiUrl string, provider string) *TraefikV1Client {
+	return &TraefikV1Client{apiUrl: apiUrl, provider: provider}
+}
+
 type apiResponse map[string]struct {
 	Routes map[string]struct {
 		Rule string `json:"rule"`
 	} `json:"routes"`
 }
 
-func GetHosts(apiUrl, provider string) ([]string, error) {
-	url := fmt.Sprintf(TkFrontendsUrl, apiUrl, provider)
+func (t *TraefikV1Client) Get() ([]string, error) {
+	url := fmt.Sprintf(TkFrontendsUrl, t.apiUrl, t.provider)
 
-	body, err := get(url)
+	body, err := t.request(url)
 
 	var parsedBody apiResponse
 
@@ -33,12 +42,12 @@ func GetHosts(apiUrl, provider string) ([]string, error) {
 		return []string{}, errors.Wrapf(err, "API response parse failed, body: %+v", body)
 	}
 
-	hosts := extractHosts(extractRules(parsedBody))
+	hosts := t.extractHosts(t.extractRules(parsedBody))
 
 	return hosts, nil
 }
 
-func get(url string) ([]byte, error) {
+func (t *TraefikV1Client) request(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return []byte{}, errors.Wrap(err, "API request failed")
@@ -48,7 +57,7 @@ func get(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func extractRules(response apiResponse) []string {
+func (t *TraefikV1Client) extractRules(response apiResponse) []string {
 	rules := make([]string, 0)
 
 	for _, v := range response {
@@ -60,7 +69,7 @@ func extractRules(response apiResponse) []string {
 	return rules
 }
 
-func extractHosts(rules []string) []string {
+func (t *TraefikV1Client) extractHosts(rules []string) []string {
 	hosts := make([]string, 0)
 
 	re := regexp.MustCompile(`(?m)Host:(.*?)([ &;]|$)`)

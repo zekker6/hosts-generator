@@ -1,4 +1,4 @@
-package api
+package traefik
 
 import (
 	"reflect"
@@ -9,6 +9,8 @@ func Test_extractHosts(t *testing.T) {
 	type args struct {
 		rules []string
 	}
+
+	tc := NewTraefikV1Client("localhost", "test")
 	tests := []struct {
 		name string
 		args args
@@ -36,7 +38,7 @@ func Test_extractHosts(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := extractHosts(tt.args.rules); !reflect.DeepEqual(got, tt.want) {
+			if got := tc.extractHosts(tt.args.rules); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("extractHosts() = %v, want %v", got, tt.want)
 			}
 		})

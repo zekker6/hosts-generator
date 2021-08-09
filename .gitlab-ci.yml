@@ -21,7 +21,7 @@ go:build:
   artifacts:
     paths:
       - out
-    expire_in: 30 days
+    expire_in: 3 days
 
 gitlab:
   stage: release
