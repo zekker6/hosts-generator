@@ -1,6 +1,8 @@
-# Traefik hosts generator
+# Hosts generator
 
-A small tool which is able to generate hosts file content for services discovered from [Traefik v1](https://traefik.io).
+A small tool which is able to generate hosts file content for services discovered from different sources:
+* [Traefik](https://traefik.io)
+* Kubernetes
 
 Available as docker image: at [dockerhub](https://hub.docker.com/repository/docker/zekker6/traefik-hosts-generator).
 
@@ -32,7 +34,7 @@ services:
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts
-    command: "-platform=linux -api=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
+    command: "-platform=linux -traefik=true -traefikUrl=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
     networks:
       - tk_web
     depends_on:
@@ -54,22 +56,28 @@ Fully working example can be found at [examples folder](example/).
 CLI flags will allow to override default behaviour such as line endings for different host operating systems(useful when using docker image), changing generated block postfix(to allow using several concurrent instances of traefik generator).
 
 ```
-  -api string
-        specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
   -file string
         specify custom hosts file location, example: '/etc/hosts_custom' (default "/etc/hosts")
   -freq int
         poll every N seconds (default 5)
   -ip string
         specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
+  -kube
+        enable kube client
+  -kubeconfig string
+        specify full path to kubeconfig (default "/home/bessarab/.kube/config")
   -platform string
         change line-endings style for hosts file, default: '', available: darwin, windows, linux
   -postfix string
         use unique postifix if 2 parallel instances are running
-  -provider string
-        traefik provider to use (default "docker")
   -quiet
         disable logging
+  -traefik
+        enable traefik client
+  -traefikProvider string
+        traefik traefikProvider to use (default "docker")
+  -traefikUrl string
+        specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
   -watch
         enable API polling mode: true/false
 ```
