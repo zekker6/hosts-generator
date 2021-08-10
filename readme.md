@@ -69,7 +69,7 @@ CLI flags will allow to override default behaviour such as line endings for diff
   -platform string
         change line-endings style for hosts file, default: '', available: darwin, windows, linux
   -postfix string
-        use unique postifix if 2 parallel instances are running
+        use unique postfix if 2 parallel instances are running
   -quiet
         disable logging
   -traefik

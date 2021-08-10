@@ -24,7 +24,7 @@ var (
 	quiet     = flag.Bool("quiet", false, "disable logging")
 	period    = flag.Int("freq", 5, "poll every N seconds")
 	watch     = flag.Bool("watch", false, "enable API polling mode: true/false")
-	postfix   = flag.String("postfix", "", "use unique postifix if 2 parallel instances are running")
+	postfix   = flag.String("postfix", "", "use unique postfix if 2 parallel instances are running")
 
 	kubeConfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "specify full path to kubeconfig")
 	kubeEnable = flag.Bool("kube", false, "enable kube client")
