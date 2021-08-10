@@ -4,7 +4,7 @@ A small tool which is able to generate hosts file content for services discovere
 * [Traefik](https://traefik.io)
 * Kubernetes
 
-Available as docker image: at [dockerhub](https://hub.docker.com/repository/docker/zekker6/traefik-hosts-generator).
+Available as docker image: at [Github Packages](https://github.com/users/zekker6/packages/container/package/traefik-hosts-generator).
 
 # Usage
 
@@ -30,7 +30,7 @@ services:
       - tk_web
 
   tk-hosts:
-    image: zekker6/traefik-hosts-generator:v0.3.2
+    image: ghcr.io/zekker6/traefik-hosts-generator:v0.4.7
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts

@@ -18,11 +18,11 @@ services:
       - tk_web
 
   tk-hosts:
-    image: zekker6/traefik-hosts-generator:v0.3.2
+    image: ghcr.io/zekker6/traefik-hosts-generator:v0.4.7
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts
-    command: "-platform=linux -api=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
+    command: "-platform=linux -traefik=true -traefikUrl=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
     networks:
       - tk_web
     depends_on:
