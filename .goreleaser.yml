@@ -35,5 +35,5 @@ dockers:
 #      - "zekker6/traefik-hosts-generator:{{ .Tag }}"
 #      - "zekker6/traefik-hosts-generator:{{ .Tag }}-{{ .Env.GO_VERSION }}"
 #      - "zekker6/traefik-hosts-generator:v{{ .Major }}"
-      - "gcr.io/zekker6/traefik-hosts-generator:latest"
-      - "gcr.io/zekker6/traefik-hosts-generator:{{ .Tag }}"
+      - "ghcr.io/zekker6/traefik-hosts-generator:latest"
+      - "ghcr.io/zekker6/traefik-hosts-generator:{{ .Tag }}"
