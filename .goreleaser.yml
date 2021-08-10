@@ -31,9 +31,5 @@ changelog:
 
 dockers:
   - image_templates:
-#      - "zekker6/traefik-hosts-generator:latest"
-#      - "zekker6/traefik-hosts-generator:{{ .Tag }}"
-#      - "zekker6/traefik-hosts-generator:{{ .Tag }}-{{ .Env.GO_VERSION }}"
-#      - "zekker6/traefik-hosts-generator:v{{ .Major }}"
       - "ghcr.io/zekker6/traefik-hosts-generator:latest"
       - "ghcr.io/zekker6/traefik-hosts-generator:{{ .Tag }}"
