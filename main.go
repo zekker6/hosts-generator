@@ -7,6 +7,7 @@ import (
 	"hosts-generator/cmd/parsers"
 	"hosts-generator/cmd/parsers/kubernetes"
 	"hosts-generator/cmd/parsers/traefik"
+	"hosts-generator/cmd/parsers/traefik_v2"
 	"k8s.io/client-go/util/homedir"
 	logger "log"
 	"os"
@@ -30,6 +31,7 @@ var (
 	kubeEnable = flag.Bool("kube", false, "enable kube client")
 
 	traefikProvider = flag.String("traefikProvider", "docker", "traefik traefikProvider to use")
+	traefikVersion  = flag.String("traefikVersion", "2", "traefik versoin to use: 1 / 2")
 	traefikUrl      = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 	traefikEnable   = flag.Bool("traefik", false, "enable traefik client")
 )
@@ -56,6 +58,9 @@ func main() {
 	var prevHosts []string
 
 	clients := buildClientsConfig()
+	if len(clients) == 0 {
+		log("WARN: no clients configured")
+	}
 
 	for {
 		hosts := getHosts(clients)
@@ -70,7 +75,7 @@ func main() {
 
 			log("updated hosts file, new hosts: %+v", hosts)
 		} else {
-			log("traefik hosts didn't change, skipping")
+			log("hosts didn't change, skipping")
 		}
 
 		if !*watch {
@@ -104,7 +109,8 @@ func buildClientsConfig() []parsers.Parser {
 
 	clientsConf := []clientConf{
 		{*kubeEnable, kubernetes.NewKubernetesClient(*kubeConfig)},
-		{*traefikEnable, traefik.NewTraefikV1Client(*traefikUrl, *traefikProvider)},
+		{*traefikEnable && *traefikVersion == "1", traefik.NewTraefikV1Client(*traefikUrl, *traefikProvider)},
+		{*traefikEnable && *traefikVersion == "2", traefik_v2.NewTraefikV2Client(*traefikUrl)},
 	}
 
 	clients := make([]parsers.Parser, 0)
