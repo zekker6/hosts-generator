@@ -31,7 +31,7 @@ var (
 	kubeEnable = flag.Bool("kube", false, "enable kube client")
 
 	traefikProvider = flag.String("traefikProvider", "docker", "traefik traefikProvider to use")
-	traefikVersion  = flag.String("traefikVersion", "2", "traefik versoin to use: 1 / 2")
+	traefikVersion  = flag.String("traefikVersion", "2", "traefik version to use: 1 / 2")
 	traefikUrl      = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 	traefikEnable   = flag.Bool("traefik", false, "enable traefik client")
 )
