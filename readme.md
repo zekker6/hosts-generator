@@ -57,27 +57,29 @@ CLI flags will allow to override default behaviour such as line endings for diff
 
 ```
   -file string
-        specify custom hosts file location, example: '/etc/hosts_custom' (default "/etc/hosts")
+    	specify custom hosts file location, example: '/etc/hosts_custom' (default "/etc/hosts")
   -freq int
-        poll every N seconds (default 5)
+    	poll every N seconds (default 5)
   -ip string
-        specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
+    	specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
   -kube
-        enable kube client
+    	enable kube client
   -kubeconfig string
-        specify full path to kubeconfig (default "/home/bessarab/.kube/config")
+    	specify full path to kubeconfig (default "/home/zekker/.kube/config")
   -platform string
-        change line-endings style for hosts file, default: '', available: darwin, windows, linux
+    	change line-endings style for hosts file, default: '', available: darwin, windows, linux
   -postfix string
-        use unique postfix if 2 parallel instances are running
+    	use unique postfix if 2 parallel instances are running
   -quiet
-        disable logging
+    	disable logging
   -traefik
-        enable traefik client
+    	enable traefik client
   -traefikProvider string
-        traefik traefikProvider to use (default "docker")
+    	traefik traefikProvider to use (default "docker")
   -traefikUrl string
-        specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
+    	specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
+  -traefikVersion string
+    	traefik version to use: 1 / 2 (default "2")
   -watch
-        enable API polling mode: true/false
+    	enable API polling mode: true/false
 ```
