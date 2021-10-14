@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	TkRoutersUrl = "%s/api/http/routers"
+	TkRoutersUrl = "%s/http/routers"
 )
 
 type TraefikV2Client struct {
