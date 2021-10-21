@@ -1,0 +1,7 @@
+providers:
+  docker:
+    defaultRule: 'Host(`{{range $i, $e := splitList "-" .Name}}{{$e}}.{{end}}docker.localhost`)'
+    network: "tk_web_tests"
+
+api:
+  insecure: true

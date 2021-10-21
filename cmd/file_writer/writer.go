@@ -68,7 +68,7 @@ func (w *Writer) Clear() error {
 
 	fullCurrentContext := currentContent[headerStart : footerStart+len(w.entriesFooter)]
 
-	newContent := strings.Replace(currentContent, fullCurrentContext, w.lineEndings, -1)
+	newContent := strings.Replace(currentContent, fullCurrentContext, "", -1)
 
 	_, err = w.hostsAdapter.Write([]byte(newContent))
 

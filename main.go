@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"hosts-generator/cmd"
 	"hosts-generator/cmd/file_writer"
 	"hosts-generator/cmd/generator"
 	"hosts-generator/cmd/parsers"
@@ -13,9 +14,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"reflect"
 	"syscall"
-	"time"
 )
 
 var (
@@ -45,60 +44,26 @@ func main() {
 
 	writer := file_writer.NewWriter(&adapter, lineEnding, *postfix)
 
-	defer func() {
-		log("clearing before exit")
-		err := writer.Clear()
-		if err != nil {
-			log("failed to clear hosts: %+v", err)
-		}
-	}()
-
 	handleExit(writer)
-
-	var prevHosts []string
 
 	clients := buildClientsConfig()
 	if len(clients) == 0 {
 		log("WARN: no clients configured")
 	}
 
-	for {
-		hosts := getHosts(clients)
+	app := cmd.NewApp(clients, writer, lineEnding, *localIP, *period, *watch, log)
 
-		if !reflect.DeepEqual(prevHosts, hosts) {
-			err := writeHosts(hosts, lineEnding, writer)
-			if err != nil {
-				panic(err)
-			}
-
-			prevHosts = hosts
-
-			log("updated hosts file, new hosts: %+v", hosts)
-		} else {
-			log("hosts didn't change, skipping")
-		}
-
-		if !*watch {
-			break
-		}
-
-		time.Sleep(time.Second * time.Duration(*period))
-	}
-}
-
-func getHosts(clients []parsers.Parser) []string {
-	hosts := make([]string, 0)
-
-	for _, c := range clients {
-
-		clientHosts, err := c.Get()
+	err := app.Run()
+	if err != nil {
+		log("runtime error: %+v", err)
+		err := app.Stop()
 		if err != nil {
-			panic(err)
+			if err != nil {
+				log("failed to clear hosts: %+v", err)
+			}
 		}
-
-		hosts = append(hosts, clientHosts...)
+		os.Exit(1)
 	}
-	return hosts
 }
 
 func buildClientsConfig() []parsers.Parser {
@@ -138,12 +103,6 @@ func handleExit(writer *file_writer.Writer) {
 		os.Exit(0)
 	}()
 
-}
-
-func writeHosts(hosts []string, lineEnding string, writer *file_writer.Writer) error {
-	fileContent := generator.GenerateStrings(hosts, *localIP, lineEnding)
-
-	return writer.WriteToHosts(fileContent)
 }
 
 func log(fmt string, params ...interface{}) {

@@ -22,3 +22,15 @@ prepare_out_dir:
 
 test:
 	go test -race -short `go list ./... | grep -v /vendor/`
+
+
+tests_integration_prepare:
+	docker network create tk_web_tests || true
+	docker-compose -f ./tests/integration/docker-compose.yml -p tk-hosts-tests up -d
+
+tests_integration_stop:
+	docker network delete tk_web_tests
+	docker-compose -f ./tests/integration/docker-compose.yml -p tk-hosts-tests down
+
+test_integration: tests_integration_prepare
+	go test -tags integration ./tests/integration/

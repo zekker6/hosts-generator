@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.5
+    volumes:
+      - "./traefik.yml:/etc/traefik/traefik.yml"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+    - "8888:8080"
+    networks: 
+      - tk_web_tests
+
+networks:
+  tk_web_tests:
+    external: true

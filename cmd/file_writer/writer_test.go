@@ -67,16 +67,34 @@ func TestWriter_Write(t *testing.T) {
 	t.Run("test appending data correctly", func(t *testing.T) {
 		adapter := getAdapter()
 		w := NewWriter(adapter, "\n", "")
-		originalContent := "127.0.0.1 localhost"
+		originalContent := `
+# Host addresses
+127.0.0.1 localhost
+::1        localhost ip6-localhost ip6-loopback
 
-		adapter.Write([]byte("127.0.0.1 localhost"))
-		w.WriteToHosts("hahahahaha")
+ff02::1    ip6-allnodes
+ff02::2    ip6-allrouters
+`
+
+		adapter.Write([]byte(originalContent))
+		w.WriteToHosts("test\ntest\ntest")
+		w.WriteToHosts("test2\ntest\ntest")
+		w.WriteToHosts("test3\ntest\ntest")
 
 		data := make([]byte, memoryStoreSize*2)
 		adapter.Read(data)
 
 		if !strings.Contains(string(data), originalContent+"\n") {
 			t.Errorf("did not found original content %s at %s", originalContent, data)
+		}
+
+		w.Clear()
+
+		data = make([]byte, memoryStoreSize*2)
+		adapter.Read(data)
+
+		if strings.Count(originalContent, "\n") != strings.Count(string(data), "\n") {
+			t.Errorf("expected to leave content untouched, expected: %s, got: %s", originalContent, string(data))
 		}
 	})
 
