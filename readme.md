@@ -17,7 +17,7 @@ version: "3"
 
 services:
   traefik:
-    image: traefik:v1.7.18
+    image: traefik:v2.6
     restart: unless-stopped
     labels:
       traefik.port: 8080
@@ -30,7 +30,7 @@ services:
       - tk_web
 
   tk-hosts:
-    image: ghcr.io/zekker6/traefik-hosts-generator:v0.4.7
+    image: ghcr.io/zekker6/traefik-hosts-generator:latest
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts
@@ -48,6 +48,11 @@ networks:
 This config will use external network `tk_web` to establish communication with application container.
 It is needed to add this network to all containers which will be connected via Traefik.
 
+You can create this network with the following command:
+
+```sh
+docker network create tk_web
+```
 
 Fully working example can be found at [examples folder](example/).
 
