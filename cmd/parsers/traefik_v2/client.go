@@ -74,8 +74,12 @@ func (t *TraefikV2Client) extractHosts(rules []string) []string {
 			continue
 		}
 
-		newHost := re.FindStringSubmatch(v)
-		hosts = append(hosts, strings.Replace(newHost[1], "Host:", "", -1))
+		newHosts := re.FindAllStringSubmatch(v, -1)
+
+		for _, newHost := range newHosts {
+			fmt.Println(newHost)
+			hosts = append(hosts, strings.Replace(newHost[1], "Host:", "", -1))
+		}
 	}
 
 	sort.Strings(hosts)
