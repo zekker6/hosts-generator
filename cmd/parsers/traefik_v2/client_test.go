@@ -25,14 +25,18 @@ func Test_extractHosts(t *testing.T) {
 					"Host(`Some.WWW.test.com.asd`)",
 					"Host(`test`);PathPrefix(`/api/`)",
 					"Host(`test`) && PathPrefix:/api/",
+					"Host(`test.some.asdf`) || Host(`test.com.zxc`) || Host(`some.test.zxc`)",
 				},
 			},
 			want: []string{
 				"Some.WWW.test.com.asd",
 				"gateway.gateway.docker.localhost",
+				"some.test.zxc",
 				"test",
 				"test",
 				"test.com.asd",
+				"test.com.zxc",
+				"test.some.asdf",
 			},
 		},
 	}
