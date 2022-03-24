@@ -1,5 +1,5 @@
 FROM scratch
 
-COPY traefik-hosts-generator /
+COPY hosts-generator /
 
-ENTRYPOINT [ "/traefik-hosts-generator" ]
+ENTRYPOINT [ "/hosts-generator" ]
