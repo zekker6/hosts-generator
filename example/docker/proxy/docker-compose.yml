@@ -2,7 +2,7 @@ version: "3"
 
 services:
   traefik:
-    image: traefik:v1.7.34
+    image: traefik:v1.7.34@sha256:c7ac8f4b5c47b5ee28c3ef93cb46e37e249173605629f775e8f33ffd00b52d04
     restart: unless-stopped
     labels:
       traefik.port: 8080
@@ -18,7 +18,7 @@ services:
       - tk_web
 
   tk-hosts:
-    image: ghcr.io/zekker6/traefik-hosts-generator:v0.5.5
+    image: ghcr.io/zekker6/traefik-hosts-generator:v0.5.5@sha256:de14d027b6b6509cca1df2ed5f75615b00d1c57f24609dd851f0d7fe69fa021e
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:stable-alpine
+    image: nginx:stable-alpine@sha256:addd3bf05ec3c69ef3e8f0021ce1ca98e0eb21117b97ab8b64127e3ff6e444ec
   networks:
     - tk_web
 
