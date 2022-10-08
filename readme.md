@@ -17,7 +17,7 @@ version: "3"
 
 services:
   traefik:
-    image: traefik:v2.6
+    image: traefik:v2.9
     restart: unless-stopped
     labels:
       traefik.port: 8080
