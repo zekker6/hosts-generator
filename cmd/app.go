@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"reflect"
+	"time"
+
 	"hosts-generator/cmd/file_writer"
 	"hosts-generator/cmd/generator"
 	"hosts-generator/cmd/parsers"
-	"reflect"
-	"time"
 )
 
 type App struct {
@@ -30,7 +31,7 @@ func (a *App) Run() error {
 	for {
 		hosts, err := a.GetHosts()
 		if err != nil {
-			return nil
+			return err
 		}
 
 		if !reflect.DeepEqual(prevHosts, hosts) {
