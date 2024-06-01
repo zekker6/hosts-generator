@@ -3,12 +3,12 @@ package traefik
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"regexp"
-	"sort"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -78,8 +78,6 @@ func (t *TraefikV1Client) extractHosts(rules []string) []string {
 		newHost := re.FindStringSubmatch(v)
 		hosts = append(hosts, strings.Replace(newHost[1], "Host:", "", -1))
 	}
-
-	sort.Strings(hosts)
 
 	return hosts
 }

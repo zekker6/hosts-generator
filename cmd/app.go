@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"context"
 	"reflect"
+	"sort"
 	"time"
 
 	"hosts-generator/cmd/file_writer"
@@ -15,20 +17,25 @@ type App struct {
 	lineEnding string
 	targetIP   string
 
-	syncPeriod int
+	syncPeriod time.Duration
 
 	enableWatch bool
 
 	logger func(fmt string, params ...interface{})
 }
 
-func NewApp(clients []parsers.Parser, writer *file_writer.Writer, lineEnding string, targetIP string, syncPeriod int, enableWatch bool, logger func(fmt string, params ...interface{})) *App {
+func NewApp(clients []parsers.Parser, writer *file_writer.Writer, lineEnding string, targetIP string, syncPeriod time.Duration, enableWatch bool, logger func(fmt string, params ...interface{})) *App {
 	return &App{clients: clients, writer: writer, lineEnding: lineEnding, targetIP: targetIP, syncPeriod: syncPeriod, enableWatch: enableWatch, logger: logger}
 }
 
-func (a *App) Run() error {
+func (a *App) Run(ctx context.Context) error {
 	var prevHosts []string
-	for {
+	t := time.NewTicker(a.syncPeriod)
+	select {
+	case <-ctx.Done():
+		return nil
+
+	case <-t.C:
 		hosts, err := a.GetHosts()
 		if err != nil {
 			return err
@@ -42,16 +49,19 @@ func (a *App) Run() error {
 
 			prevHosts = hosts
 
-			a.logger("updated hosts file, new hosts: %+v", hosts)
+			if a.logger != nil {
+				a.logger("updated hosts file, new hosts: %+v", hosts)
+
+			}
 		} else {
-			a.logger("hosts didn't change, skipping")
+			if a.logger != nil {
+				a.logger("hosts didn't change, skipping")
+			}
 		}
 
 		if !a.enableWatch {
 			break
 		}
-
-		time.Sleep(time.Second * time.Duration(a.syncPeriod))
 	}
 
 	return nil
@@ -71,7 +81,6 @@ func (a *App) GetHosts() ([]string, error) {
 	hosts := make([]string, 0)
 
 	for _, c := range a.clients {
-
 		clientHosts, err := c.Get()
 		if err != nil {
 			return []string{}, err
@@ -79,5 +88,8 @@ func (a *App) GetHosts() ([]string, error) {
 
 		hosts = append(hosts, clientHosts...)
 	}
+
+	sort.Strings(hosts)
+
 	return hosts, nil
 }

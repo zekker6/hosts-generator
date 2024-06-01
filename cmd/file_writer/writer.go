@@ -1,9 +1,10 @@
 package file_writer
 
 import (
-	"github.com/pkg/errors"
 	"io"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 const (

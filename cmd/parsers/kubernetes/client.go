@@ -2,11 +2,11 @@ package kubernetes
 
 import (
 	"context"
+
 	"github.com/pkg/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"sort"
 )
 
 type Client struct {
@@ -39,8 +39,6 @@ func (k Client) Get() ([]string, error) {
 			hosts = append(hosts, r.Host)
 		}
 	}
-
-	sort.Strings(hosts)
 
 	return hosts, nil
 

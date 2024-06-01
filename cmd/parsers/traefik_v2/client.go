@@ -3,12 +3,12 @@ package traefik_v2
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
 	"regexp"
-	"sort"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -80,8 +80,6 @@ func (t *TraefikV2Client) extractHosts(rules []string) []string {
 			hosts = append(hosts, strings.Replace(newHost[1], "Host:", "", -1))
 		}
 	}
-
-	sort.Strings(hosts)
 
 	return hosts
 }

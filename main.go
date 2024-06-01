@@ -1,20 +1,25 @@
 package main
 
 import (
+	"context"
 	"flag"
-	"hosts-generator/cmd"
-	"hosts-generator/cmd/file_writer"
-	"hosts-generator/cmd/generator"
-	"hosts-generator/cmd/parsers"
-	"hosts-generator/cmd/parsers/kubernetes"
-	"hosts-generator/cmd/parsers/traefik"
-	"hosts-generator/cmd/parsers/traefik_v2"
-	"k8s.io/client-go/util/homedir"
 	logger "log"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
+	"time"
+
+	"hosts-generator/cmd"
+	"hosts-generator/cmd/file_writer"
+	"hosts-generator/cmd/generator"
+	"hosts-generator/cmd/parsers"
+	"hosts-generator/cmd/parsers/caddy"
+	"hosts-generator/cmd/parsers/kubernetes"
+	"hosts-generator/cmd/parsers/traefik"
+	"hosts-generator/cmd/parsers/traefik_v2"
+
+	"k8s.io/client-go/util/homedir"
 )
 
 var (
@@ -33,6 +38,8 @@ var (
 	traefikVersion  = flag.String("traefikVersion", "2", "traefik version to use: 1 / 2")
 	traefikUrl      = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 	traefikEnable   = flag.Bool("traefik", false, "enable traefik client")
+
+	caddyURL = flag.String("caddyURL", "", "specify custom caddy API url, example: 'http://127.0.0.1:2019/config/'")
 )
 
 func main() {
@@ -51,9 +58,9 @@ func main() {
 		log("WARN: no clients configured")
 	}
 
-	app := cmd.NewApp(clients, writer, lineEnding, *localIP, *period, *watch, log)
+	app := cmd.NewApp(clients, writer, lineEnding, *localIP, time.Second*time.Duration(*period), *watch, log)
 
-	err := app.Run()
+	err := app.Run(context.Background())
 	if err != nil {
 		log("runtime error: %+v", err)
 		err := app.Stop()
@@ -76,6 +83,7 @@ func buildClientsConfig() []parsers.Parser {
 		{*kubeEnable, kubernetes.NewKubernetesClient(*kubeConfig)},
 		{*traefikEnable && *traefikVersion == "1", traefik.NewTraefikV1Client(*traefikUrl, *traefikProvider)},
 		{*traefikEnable && *traefikVersion == "2", traefik_v2.NewTraefikV2Client(*traefikUrl)},
+		{len(*caddyURL) != 0, caddy.NewCaddyV3(*caddyURL)},
 	}
 
 	clients := make([]parsers.Parser, 0)

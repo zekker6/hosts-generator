@@ -6,7 +6,7 @@ type MemoryHostsAdapter struct {
 
 func NewMemoryHostsAdapter(size int) MemoryHostsAdapter {
 	return MemoryHostsAdapter{
-		data: make([]byte, size),
+		data: make([]byte, 0, size),
 	}
 }
 
