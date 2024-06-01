@@ -3,8 +3,11 @@
 A small tool which is able to generate hosts file content for services discovered from different sources:
 * [Traefik](https://traefik.io)
 * Kubernetes
+* [Caddy](https://caddyserver.com/)
 
-Available as docker image: at [Github Packages](https://github.com/users/zekker6/packages/container/package/traefik-hosts-generator).
+Available as docker image:
+- v0.6.0+ published [here](https://github.com/zekker6/hosts-generator/pkgs/container/hosts-generator)
+- previous versions published [here](https://github.com/users/zekker6/packages/container/package/traefik-hosts-generator)
 
 # Usage
 
@@ -61,30 +64,32 @@ Fully working example can be found at [examples folder](example/).
 CLI flags will allow to override default behaviour such as line endings for different host operating systems(useful when using docker image), changing generated block postfix(to allow using several concurrent instances of traefik generator).
 
 ```
+  -caddyURL string
+        specify custom caddy API url, example: 'http://127.0.0.1:2019/config/'
   -file string
-    	specify custom hosts file location, example: '/etc/hosts_custom' (default "/etc/hosts")
+        specify custom hosts file location, example: '/etc/hosts_custom' (default "/etc/hosts")
   -freq int
-    	poll every N seconds (default 5)
+        poll every N seconds (default 5)
   -ip string
-    	specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
+        specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
   -kube
-    	enable kube client
+        enable kube client
   -kubeconfig string
-    	specify full path to kubeconfig (default "/home/zekker/.kube/config")
+        specify full path to kubeconfig (default "/home/zekker/.kube/config")
   -platform string
-    	change line-endings style for hosts file, default: '', available: darwin, windows, linux
+        change line-endings style for hosts file, default: '', available: darwin, windows, linux
   -postfix string
-    	use unique postfix if 2 parallel instances are running
+        use unique postfix if 2 parallel instances are running
   -quiet
-    	disable logging
+        disable logging
   -traefik
-    	enable traefik client
+        enable traefik client
   -traefikProvider string
-    	traefik traefikProvider to use (default "docker")
+        traefik traefikProvider to use (default "docker")
   -traefikUrl string
-    	specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
+        specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
   -traefikVersion string
-    	traefik version to use: 1 / 2 (default "2")
+        traefik version to use: 1 / 2 (default "2")
   -watch
-    	enable API polling mode: true/false
+        enable API polling mode: true/false
 ```
