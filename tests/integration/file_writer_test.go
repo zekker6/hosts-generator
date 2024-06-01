@@ -4,14 +4,16 @@
 package main
 
 import (
-	"hosts-generator/cmd"
-	"hosts-generator/cmd/file_writer"
-	"hosts-generator/cmd/parsers"
-	"hosts-generator/cmd/parsers/traefik_v2"
+	"context"
 	"io/ioutil"
 	"log"
 	"reflect"
 	"testing"
+
+	"hosts-generator/cmd"
+	"hosts-generator/cmd/file_writer"
+	"hosts-generator/cmd/parsers"
+	"hosts-generator/cmd/parsers/traefik_v2"
 )
 
 const (
@@ -38,7 +40,7 @@ func TestWritingToFile(t *testing.T) {
 
 	t.Run("runs application", func(t *testing.T) {
 
-		err := app.Run()
+		err := app.Run(context.Background())
 		if err != nil {
 			t.Errorf("unexpected error: %+v", err)
 		}
@@ -48,7 +50,7 @@ func TestWritingToFile(t *testing.T) {
 		for i := 0; i <= 5; i++ {
 			initialContent, _ := ioutil.ReadFile(tmpFile)
 
-			err := app.Run()
+			err := app.Run(context.Background())
 			if err != nil {
 				t.Errorf("unexpected error: %+v", err)
 			}

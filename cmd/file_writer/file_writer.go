@@ -1,7 +1,6 @@
 package file_writer
 
 import (
-	"io/ioutil"
 	"os"
 )
 
@@ -16,7 +15,7 @@ func NewFileHostsAdapter(hostsLocation string) FileHostsAdapter {
 }
 
 func (fa *FileHostsAdapter) Read(p []byte) (n int, err error) {
-	data, err := ioutil.ReadFile(fa.hostsLocation)
+	data, err := os.ReadFile(fa.hostsLocation)
 	if err != nil {
 		return 0, err
 	}
@@ -26,7 +25,7 @@ func (fa *FileHostsAdapter) Read(p []byte) (n int, err error) {
 }
 
 func (fa *FileHostsAdapter) Write(p []byte) (n int, err error) {
-	err = ioutil.WriteFile(fa.hostsLocation, p, 0600)
+	err = os.WriteFile(fa.hostsLocation, p, 0600)
 	if err != nil {
 		return 0, err
 	}
@@ -35,14 +34,11 @@ func (fa *FileHostsAdapter) Write(p []byte) (n int, err error) {
 }
 
 func (fa *FileHostsAdapter) Append(p []byte) error {
-	f, err := os.OpenFile(fa.hostsLocation, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	data, err := os.ReadFile(fa.hostsLocation)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	if _, err := f.WriteString(string(p)); err != nil {
-		return err
-	}
 
-	return nil
+	data = append(data, p...)
+	return os.WriteFile(fa.hostsLocation, data, 0600)
 }
