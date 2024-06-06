@@ -16,7 +16,6 @@ import (
 	"hosts-generator/cmd/parsers"
 	"hosts-generator/cmd/parsers/caddy"
 	"hosts-generator/cmd/parsers/kubernetes"
-	"hosts-generator/cmd/parsers/traefik"
 	"hosts-generator/cmd/parsers/traefik_v2"
 
 	"k8s.io/client-go/util/homedir"
@@ -34,10 +33,7 @@ var (
 	kubeConfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "specify full path to kubeconfig")
 	kubeEnable = flag.Bool("kube", false, "enable kube client")
 
-	traefikProvider = flag.String("traefikProvider", "docker", "traefik traefikProvider to use")
-	traefikVersion  = flag.String("traefikVersion", "2", "traefik version to use: 1 / 2")
-	traefikUrl      = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
-	traefikEnable   = flag.Bool("traefik", false, "enable traefik client")
+	traefikUrl = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 
 	caddyURL = flag.String("caddyURL", "", "specify custom caddy API url, example: 'http://127.0.0.1:2019/config/'")
 )
@@ -81,8 +77,7 @@ func buildClientsConfig() []parsers.Parser {
 
 	clientsConf := []clientConf{
 		{*kubeEnable, kubernetes.NewKubernetesClient(*kubeConfig)},
-		{*traefikEnable && *traefikVersion == "1", traefik.NewTraefikV1Client(*traefikUrl, *traefikProvider)},
-		{*traefikEnable && *traefikVersion == "2", traefik_v2.NewTraefikV2Client(*traefikUrl)},
+		{len(*traefikUrl) != 0, traefik_v2.NewTraefikV2Client(*traefikUrl)},
 		{len(*caddyURL) != 0, caddy.NewCaddyV3(*caddyURL)},
 	}
 
