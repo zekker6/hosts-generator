@@ -31,36 +31,39 @@ func NewApp(clients []parsers.Parser, writer *file_writer.Writer, lineEnding str
 func (a *App) Run(ctx context.Context) error {
 	var prevHosts []string
 	t := time.NewTicker(a.syncPeriod)
-	select {
-	case <-ctx.Done():
-		return nil
 
-	case <-t.C:
-		hosts, err := a.GetHosts()
-		if err != nil {
-			return err
-		}
+	for {
+		select {
+		case <-ctx.Done():
+			return nil
 
-		if !reflect.DeepEqual(prevHosts, hosts) {
-			err := a.WriteHosts(hosts)
+		case <-t.C:
+			hosts, err := a.GetHosts()
 			if err != nil {
-				panic(err)
+				return err
 			}
 
-			prevHosts = hosts
+			if !reflect.DeepEqual(prevHosts, hosts) {
+				err := a.WriteHosts(hosts)
+				if err != nil {
+					panic(err)
+				}
 
-			if a.logger != nil {
-				a.logger("updated hosts file, new hosts: %+v", hosts)
+				prevHosts = hosts
 
+				if a.logger != nil {
+					a.logger("updated hosts file, new hosts: %+v", hosts)
+
+				}
+			} else {
+				if a.logger != nil {
+					a.logger("hosts didn't change, skipping")
+				}
 			}
-		} else {
-			if a.logger != nil {
-				a.logger("hosts didn't change, skipping")
-			}
-		}
 
-		if !a.enableWatch {
-			break
+			if !a.enableWatch {
+				break
+			}
 		}
 	}
 
