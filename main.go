@@ -31,7 +31,6 @@ var (
 	postfix   = flag.String("postfix", "", "use unique postfix if 2 parallel instances are running")
 
 	kubeConfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "specify full path to kubeconfig")
-	kubeEnable = flag.Bool("kube", false, "enable kube client")
 
 	traefikUrl = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 
@@ -76,7 +75,7 @@ func buildClientsConfig() []parsers.Parser {
 	}
 
 	clientsConf := []clientConf{
-		{*kubeEnable, kubernetes.NewKubernetesClient(*kubeConfig)},
+		{len(*kubeConfig) != 0, kubernetes.NewKubernetesClient(*kubeConfig)},
 		{len(*traefikUrl) != 0, traefik_v2.NewTraefikV2Client(*traefikUrl)},
 		{len(*caddyURL) != 0, caddy.NewCaddyV3(*caddyURL)},
 	}
