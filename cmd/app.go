@@ -23,9 +23,26 @@ type App struct {
 
 	logger func(fmt string, params ...interface{})
 }
+type AppConfig struct {
+	Clients     []parsers.Parser
+	Writer      *file_writer.Writer
+	LineEnding  string
+	TargetIP    string
+	SyncPeriod  time.Duration
+	EnableWatch bool
+	Logger      func(fmt string, params ...interface{})
+}
 
-func NewApp(clients []parsers.Parser, writer *file_writer.Writer, lineEnding string, targetIP string, syncPeriod time.Duration, enableWatch bool, logger func(fmt string, params ...interface{})) *App {
-	return &App{clients: clients, writer: writer, lineEnding: lineEnding, targetIP: targetIP, syncPeriod: syncPeriod, enableWatch: enableWatch, logger: logger}
+func NewApp(config *AppConfig) *App {
+	return &App{
+		clients:     config.Clients,
+		writer:      config.Writer,
+		lineEnding:  config.LineEnding,
+		targetIP:    config.TargetIP,
+		syncPeriod:  config.SyncPeriod,
+		enableWatch: config.EnableWatch,
+		logger:      config.Logger,
+	}
 }
 
 func (a *App) Run(ctx context.Context) error {

@@ -53,16 +53,23 @@ func main() {
 		log("WARN: no clients configured")
 	}
 
-	app := cmd.NewApp(clients, writer, lineEnding, *localIP, time.Second*time.Duration(*period), *watch, log)
+	appConfig := &cmd.AppConfig{
+		Clients:     clients,
+		Writer:      writer,
+		LineEnding:  lineEnding,
+		TargetIP:    *localIP,
+		SyncPeriod:  time.Second * time.Duration(*period),
+		EnableWatch: *watch,
+		Logger:      log,
+	}
+	app := cmd.NewApp(appConfig)
 
 	err := app.Run(context.Background())
 	if err != nil {
 		log("runtime error: %+v", err)
 		err := app.Stop()
 		if err != nil {
-			if err != nil {
-				log("failed to clear hosts: %+v", err)
-			}
+			log("failed to clear hosts: %+v", err)
 		}
 		os.Exit(1)
 	}

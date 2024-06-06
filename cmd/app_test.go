@@ -97,7 +97,17 @@ ff02::2          ip6-allrouters
 
 	adapter := file_writer.NewWriter(&writer, newline, "")
 
-	app := NewApp([]parsers.Parser{c, c2}, adapter, newline, "127.0.0.1", 1*time.Millisecond, true, nil)
+	appConfig := &AppConfig{
+		EnableWatch: true,
+		Writer:      adapter,
+		LineEnding:  newline,
+		Clients:     []parsers.Parser{c, c2},
+		TargetIP:    "127.0.0.1",
+		SyncPeriod:  1 * time.Millisecond,
+		Logger:      nil,
+	}
+
+	app := NewApp(appConfig)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
