@@ -6,7 +6,7 @@ Pre-requirements:
 
 Start hosts-generator:
 ```bash
-hosts-generator -watch=true -kube=true -kubeconfig ~/.kube/config -file=/etc/hosts -ip=127.0.0.1
+hosts-generator -watch=true -kubeconfig ~/.kube/config -file=/etc/hosts -ip=127.0.0.1
 ```
 
 > Note: replace 127.0.0.1 with ingress controller IP if needed.

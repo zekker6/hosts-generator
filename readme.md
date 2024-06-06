@@ -20,7 +20,7 @@ version: "3"
 
 services:
   traefik:
-    image: traefik:v2.9
+    image: traefik:v3.0.1
     restart: unless-stopped
     labels:
       traefik.port: 8080
@@ -33,11 +33,11 @@ services:
       - tk_web
 
   tk-hosts:
-    image: ghcr.io/zekker6/traefik-hosts-generator:latest
+    image: ghcr.io/zekker6/hosts-generator:v1.0.0
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts
-    command: "-platform=linux -traefik=true -traefikUrl=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
+    command: "-platform=linux -traefikUrl=http://traefik:8080/api -file=/hosts -watch=true -freq=10"
     networks:
       - tk_web
     depends_on:
