@@ -6,7 +6,6 @@ import (
 	logger "log"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 	"time"
 
@@ -17,8 +16,6 @@ import (
 	"hosts-generator/cmd/parsers/caddy"
 	"hosts-generator/cmd/parsers/kubernetes"
 	"hosts-generator/cmd/parsers/traefik_v2"
-
-	"k8s.io/client-go/util/homedir"
 )
 
 var (
@@ -33,9 +30,9 @@ var (
 	skipWildcard = flag.Bool("skipWildcard", false, "remove wildcard entries in hosts file. "+
 		"Not all DNS servers support wildcard entries, so this option can be used to filter out unsupported entries.")
 
-	kubeConfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "specify full path to kubeconfig")
+	kubeConfig = flag.String("kubeconfig", "", "specify full path to kubeconfig")
 
-	traefikUrl = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
+	traefikUrl = flag.String("traefikUrl", "", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
 
 	caddyURL = flag.String("caddyURL", "", "specify custom caddy API url, example: 'http://127.0.0.1:2019/config/'")
 )
