@@ -72,8 +72,6 @@ CLI flags will allow to override default behaviour such as line endings for diff
         poll every N seconds (default 5)
   -ip string
         specify custom ip to use in hosts file, example: '192.168.33.10' (default "127.0.0.1")
-  -kube
-        enable kube client
   -kubeconfig string
         specify full path to kubeconfig (default "/home/zekker/.kube/config")
   -platform string
@@ -82,14 +80,10 @@ CLI flags will allow to override default behaviour such as line endings for diff
         use unique postfix if 2 parallel instances are running
   -quiet
         disable logging
-  -traefik
-        enable traefik client
-  -traefikProvider string
-        traefik traefikProvider to use (default "docker")
+  -skipWildcard
+        remove wildcard entries in hosts file. Not all DNS servers support wildcard entries, so this option can be used to filter out unsupported entries.
   -traefikUrl string
         specify custom traefik API url, example: 'http://127.0.0.1:8080/api' (default "http://localhost:8080/api")
-  -traefikVersion string
-        traefik version to use: 1 / 2 (default "2")
   -watch
         enable API polling mode: true/false
 ```
