@@ -30,6 +30,9 @@ var (
 	watch     = flag.Bool("watch", false, "enable API polling mode: true/false")
 	postfix   = flag.String("postfix", "", "use unique postfix if 2 parallel instances are running")
 
+	skipWildcard = flag.Bool("skipWildcard", false, "remove wildcard entries in hosts file. "+
+		"Not all DNS servers support wildcard entries, so this option can be used to filter out unsupported entries.")
+
 	kubeConfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "specify full path to kubeconfig")
 
 	traefikUrl = flag.String("traefikUrl", "http://localhost:8080/api", "specify custom traefik API url, example: 'http://127.0.0.1:8080/api'")
@@ -54,13 +57,14 @@ func main() {
 	}
 
 	appConfig := &cmd.AppConfig{
-		Clients:     clients,
-		Writer:      writer,
-		LineEnding:  lineEnding,
-		TargetIP:    *localIP,
-		SyncPeriod:  time.Second * time.Duration(*period),
-		EnableWatch: *watch,
-		Logger:      log,
+		Clients:      clients,
+		Writer:       writer,
+		LineEnding:   lineEnding,
+		TargetIP:     *localIP,
+		SyncPeriod:   time.Second * time.Duration(*period),
+		EnableWatch:  *watch,
+		Logger:       log,
+		SkipWildcard: *skipWildcard,
 	}
 	app := cmd.NewApp(appConfig)
 
