@@ -33,7 +33,7 @@ services:
       - tk_web
 
   tk-hosts:
-    image: ghcr.io/zekker6/hosts-generator:v1.0.0
+    image: ghcr.io/zekker6/hosts-generator:v1.0.1
     restart: unless-stopped
     volumes:
       - /etc/hosts:/hosts
