@@ -67,9 +67,15 @@ func (w *Writer) Clear() error {
 		return err
 	}
 
-	fullCurrentContext := currentContent[headerStart : footerStart+len(w.entriesFooter)]
+	fullCurrentContext := ""
+	newContent := ""
+	if headerStart == footerStart && footerStart == -1 {
+		// there is no content created by current generator
+		return nil
+	}
 
-	newContent := strings.Replace(currentContent, fullCurrentContext, "", -1)
+	fullCurrentContext = currentContent[headerStart : footerStart+len(w.entriesFooter)]
+	newContent = strings.Replace(currentContent, fullCurrentContext, "", -1)
 
 	_, err = w.hostsAdapter.Write([]byte(newContent))
 
