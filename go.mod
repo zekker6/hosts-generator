@@ -2,7 +2,7 @@ module hosts-generator
 
 go 1.22.0
 
-toolchain go1.23.0
+toolchain go1.23.2
 
 require (
 	github.com/pkg/errors v0.9.1
