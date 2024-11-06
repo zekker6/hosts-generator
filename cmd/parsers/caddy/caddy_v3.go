@@ -65,19 +65,8 @@ type Route struct {
 	Group    string   `json:"group,omitempty"`
 }
 
-type LoggerNames struct {
-	WildcardHeZekkerCloud string `json:"*.he.zekker.cloud"`
-	WildcardZekkerDevTk   string `json:"*.zekker-dev.tk"`
-	WildcardZekkerCloud   string `json:"*.zekker.cloud"`
-}
-
-type Logs struct {
-	LoggerNames LoggerNames `json:"logger_names"`
-}
-
 type Server struct {
 	Listen []string `json:"listen"`
-	Logs   Logs     `json:"logs"`
 	Routes []Route  `json:"routes"`
 }
 
