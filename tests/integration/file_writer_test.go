@@ -9,6 +9,7 @@ import (
 	"log"
 	"reflect"
 	"testing"
+	"time"
 
 	"hosts-generator/cmd"
 	"hosts-generator/cmd/file_writer"
@@ -36,7 +37,15 @@ func TestWritingToFile(t *testing.T) {
 
 	writer := file_writer.NewWriter(&adapter, lineEnding, "")
 
-	app := cmd.NewApp([]parsers.Parser{cl}, writer, lineEnding, "127.0.0.1", 1, false, log.Default().Printf)
+	app := cmd.NewApp(&cmd.AppConfig{
+		Clients:     []parsers.Parser{cl},
+		Writer:      writer,
+		LineEnding:  lineEnding,
+		TargetIP:    "127.0.0.1",
+		EnableWatch: false,
+		Logger:      log.Default().Printf,
+		SyncPeriod:  1 * time.Millisecond,
+	})
 
 	t.Run("runs application", func(t *testing.T) {
 

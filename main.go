@@ -121,7 +121,7 @@ func log(fmt string, params ...interface{}) {
 	}
 
 	if len(params) == 0 {
-		logger.Printf(fmt)
+		logger.Print(fmt)
 	} else {
 		logger.Printf(fmt, params...)
 	}
