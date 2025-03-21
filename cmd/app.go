@@ -86,7 +86,7 @@ func (a *App) Run(ctx context.Context) error {
 			}
 
 			if !a.enableWatch {
-				break
+				return nil
 			}
 		}
 	}
