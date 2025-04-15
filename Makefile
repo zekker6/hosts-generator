@@ -21,7 +21,7 @@ prepare_out_dir:
 	mkdir -p ${OUT_DIR}
 
 test:
-	go test -race -short `go list ./... | grep -v /vendor/`
+	go test -race -short ./...
 
 tests_integration_prepare:
 	docker network create tk_web_tests || true
