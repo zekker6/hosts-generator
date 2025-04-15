@@ -8,7 +8,7 @@ func TestMemoryHostsAdapter_Initial(t *testing.T) {
 		out := make([]byte, memoryStoreSize)
 		adapter.Read(out)
 
-		if "" != toString(out) {
+		if toString(out) != "" {
 			t.Errorf("Expteced buffer to be empty, got: %+v", toString(out))
 		}
 	})

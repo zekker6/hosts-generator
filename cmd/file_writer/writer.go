@@ -75,7 +75,7 @@ func (w *Writer) Clear() error {
 	}
 
 	fullCurrentContext = currentContent[headerStart : footerStart+len(w.entriesFooter)]
-	newContent = strings.Replace(currentContent, fullCurrentContext, "", -1)
+	newContent = strings.ReplaceAll(currentContent, fullCurrentContext, "")
 
 	_, err = w.hostsAdapter.Write([]byte(newContent))
 
@@ -135,7 +135,7 @@ func (w *Writer) replaceContent(newHosts string) error {
 	if err != nil {
 		return err
 	}
-	newContent := strings.Replace(currentContent, oldContent, w.lineEndings+newHosts+w.lineEndings, -1)
+	newContent := strings.ReplaceAll(currentContent, oldContent, w.lineEndings+newHosts+w.lineEndings)
 
 	_, err = w.hostsAdapter.Write([]byte(newContent))
 	if err != nil {

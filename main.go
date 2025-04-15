@@ -101,7 +101,7 @@ func buildClientsConfig() []parsers.Parser {
 }
 
 func handleExit(writer *file_writer.Writer) {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
@@ -134,13 +134,10 @@ func detectLineEndings() string {
 		switch *platform {
 		case "linux":
 			lineEnding = "\n"
-			break
 		case "darwin":
 			lineEnding = "\n"
-			break
 		case "windows":
 			lineEnding = "\r\n"
-			break
 		default:
 			log("Unknown platform specified: %s, supported: linux, darwin, windows", *platform)
 			os.Exit(1)

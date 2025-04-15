@@ -3,7 +3,7 @@ package traefik_v2
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strings"
@@ -31,9 +31,11 @@ func (t *TraefikV2Client) Get() ([]string, error) {
 	url := fmt.Sprintf(TkRoutersUrl, t.apiUrl)
 
 	body, err := t.request(url)
+	if err != nil {
+		return []string{}, errors.Wrapf(err, "API request failed, url: %s", url)
+	}
 
 	var parsedBody apiResponse
-
 	err = json.Unmarshal(body, &parsedBody)
 	if err != nil {
 		return []string{}, errors.Wrapf(err, "API response parse failed, body: %+v", body)
@@ -51,7 +53,7 @@ func (t *TraefikV2Client) request(url string) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 func (t *TraefikV2Client) extractRules(response apiResponse) []string {
@@ -77,7 +79,7 @@ func (t *TraefikV2Client) extractHosts(rules []string) []string {
 		newHosts := re.FindAllStringSubmatch(v, -1)
 
 		for _, newHost := range newHosts {
-			hosts = append(hosts, strings.Replace(newHost[1], "Host:", "", -1))
+			hosts = append(hosts, strings.ReplaceAll(newHost[1], "Host:", ""))
 		}
 	}
 

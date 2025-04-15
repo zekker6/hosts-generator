@@ -33,3 +33,14 @@ tests_integration_stop:
 
 test_integration: tests_integration_prepare
 	go test -tags integration ./tests/integration/
+
+lint: lint_vet lint_gofmt lint_golangcilint
+
+lint_vet:
+	go vet ./...
+
+lint_gofmt:
+	gofmt -l -w -s ./
+
+lint_golangcilint:
+	golangci-lint run --modules-download-mode readonly --timeout=10m

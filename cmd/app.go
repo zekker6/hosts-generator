@@ -90,8 +90,6 @@ func (a *App) Run(ctx context.Context) error {
 			}
 		}
 	}
-
-	return nil
 }
 
 func (a *App) Stop() error {
