@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.24
+      - name: Install mise
+        uses: jdx/mise-action@v2
       - name: Run lint
         run: make lint
       - name: Run tests
