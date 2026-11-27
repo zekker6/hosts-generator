@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/pkg/errors v0.9.1
 	k8s.io/apimachinery v0.37.2
-	k8s.io/client-go v0.37.2
+	k8s.io/client-go v11.0.0+incompatible
 )
 
 require (
